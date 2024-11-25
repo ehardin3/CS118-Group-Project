@@ -1,0 +1,8 @@
+Wind Energy: Global wind capacity has been growing rapidly, with global wind power capacity exceeding 1,000 GW by 2023. Wind energy avoids about 1.5 billion tons of CO2 emissions annually.
+Solar Energy: Solar power has also grown significantly. The total installed global solar capacity will reach 1,100 GW by 2023, and solar energy avoids about 1 billion tons of CO2
+emissions annually.
+Hydropower: Contributes about 16% of global electricity generation, producing nearly zero CO2 emissions during operation. 
+However, the environmental impact of dam construction and ecosystem disruption can have other environmental consequences.
+
+Rehman, Abdul, et al. “Globalization and Renewable Energy Use: How Are They Contributing to Upsurge the CO2 Emissions? A Global Perspective.”
+Environmental Science and Pollution Research International, vol. 30, no. 4, 2023, pp. 9699–712, https://doi.org/10.1007/s11356-022-22775-6.

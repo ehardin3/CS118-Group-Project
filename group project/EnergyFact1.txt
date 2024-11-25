@@ -1,0 +1,7 @@
+Energy consumption is a major source of global CO? emissions, with the energy sector accounting for about 73% of global CO? emissions in 2021.
+Coal-fired power plants emit about 820 grams of CO? per kWh of electricity generated.
+Natural gas power plants emit about 450 grams of CO? per kWh of electricity generated.
+Wind and Solar have near-zero CO? emissions during operation, though the production of equipment does have some emissions.
+
+Whitaker, Michael, et al. “Life Cycle Greenhouse Gas Emissions of Coal-Fired Electricity Generation.”
+Journal of Industrial Ecology, vol. 16, no. s1, 2012, pp. S53–72, https://doi.org/10.1111/j.1530-9290.2012.00465.x.

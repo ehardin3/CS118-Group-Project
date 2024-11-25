@@ -1,0 +1,7 @@
+WARNING!
+This program does not take into account many factors that actual people take into account when making decisions.
+Some of these questions mention cost but people's finances are NOT included in the calculations.
+Some of these questions also assume certain things so that the calculations are easier to figure out.
+Most of the facts are from sources from the last few years, however, many of the calculations are taken from sources that are a little older since the newer sources don't have actual equations.
+We are only asking a couple of questions, so this will only be a rough estimate. If we wanted to get an actual estimate of your carbon emission there would be way too many questions, 
+including if you want to take this little quiz.

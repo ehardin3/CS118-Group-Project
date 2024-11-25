@@ -1,0 +1,10 @@
+*The calculations used do not take into account any factors besides the physical method of transit* 
+
+Factors Influencing CO2 Emissions
+- Variations in emissions are influenced by a mixture of factors:
+1. High truck activity and low fuel efficiency contributed significantly to higher emissions.
+2. Urban development patterns, such as population density and job distribution, affect fuel efficiency and emissions.
+3. Wealthier metropolitan areas generally exhibited higher emissions per capita
+
+SOUTHWORTH, Frank, and Anthon SONNENBERG. “Set of Comparable Carbon Footprints for Highway Travel in Metropolitan America: Transportation, the Environment, and Sustainability.”
+Journal of Transportation Engineering, vol. 137, no. 6, 2011, pp. 426–35.
