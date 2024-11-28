@@ -1,0 +1,16 @@
+Explanation of Emission Factors
+Our team researched transportation emissions from reputable sources to determine realistic values for this project. These factors represent average emissions based on common assumptions and publicly available data.
+	1.	Bus Emission Factor (ef_bus = 0.1 kg CO₂ per mile)
+Buses are more efficient because they carry many passengers. Research shows emissions range from 0.05 to 0.15 kg CO₂ per mile, depending on the fuel type and passenger load. We selected 0.1 as a reasonable average for a diesel-powered bus with moderate occupancy.
+	2.	Car Emission Factor (ef_car = 0.3 kg CO₂ per mile)
+Cars emit more CO₂ than buses, with emissions ranging between 0.25 and 0.35 kg CO₂ per mile based on fuel efficiency. For example, larger vehicles like SUVs emit more, while compact cars emit less. We used 0.3 to represent a mid-sized car with average efficiency.
+	3.	Carpool Emission Factor (ef_carpool = 0.3 kg CO₂ per mile, divided by passengers)
+Carpooling divides emissions among passengers, so we used the same factor as a car (0.3) but divided it by the number of passengers to reflect shared responsibility. This approach is common in carbon calculators.
+	4.	Non-Motorized Modes (zero value = 0.0)
+Walking and biking don’t produce direct CO₂ emissions, so we assigned them 0.0 kg CO₂ per mile.
+Sources We Consulted
+	•	EPA Data: Emissions from passenger vehicles and public transit.
+	•	Carbon Calculators: Online tools like the CoolClimate Network.
+	•	Transportation Studies: General research on emissions by mode.
+Summary
+These factors are averages based on credible sources. While real-world values vary (e.g., electric vehicles or bus occupancy), our estimates provide a practical starting point for understanding transportation-related emissions.
