@@ -35,7 +35,7 @@ main:
 # Handle weekday transportation input and calculations
 handle_weekday_transportation:
     addiu $sp, $sp, -8       # Allocate space on the stack
-    sw $ra, 4($sp)           # Save return address
+    sw $ra, 4($sp)           # Save return address to main
     sw $t0, 0($sp)           # Save temporary register $t0
 
     li $v0, 4
@@ -66,7 +66,7 @@ ask_miles:
     la $a0, miles_question
     syscall
 
-    li $v0, 6
+    li $v0, 7
     syscall
     mov.d $f2, $f0           # Save miles in $f2
 
