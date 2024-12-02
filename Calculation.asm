@@ -203,6 +203,17 @@ display_weekday_emissions:
     addiu $sp, $sp, -4       # Allocate space on the stack
     sw $ra, 0($sp)           # Save return address
 
+# Example: Normalize emissions for a calculated $f0
+jal normalize_emission  # Normalize the emission value in $f0
+move $t4, $v0           # Save normalized height in $t3
+
+	li $a0, 1		# set first bar starting x position to x = 1
+	li $a1, 10		# set first bar starting x position to x = 10
+	move $a2, $t4		# set first bar height to 64
+	li $a3, GREEN		# set color to gray
+	jal drawBar		# draw bar
+
+
     li $v0, 4
     la $a0, weekday_emission_result
     syscall
@@ -300,13 +311,50 @@ barLoopHorizontal:
 	j barLoopHorizontal
 
 barLoop:
-	blt $s0, $s5, exit	# if s0 < s5
+	blt $s0, $s5, barExit	# if s0 < s5
 	move $s3, $s6		# The starting x position
 	subi $s0, $s0, 1	# move y one position up
 	j barLoopHorizontal
-exit:	
+barExit:	
 	lw $ra, -4($fp)			# restore return address
 	lw $fp, 0($fp)			# restore frame pointer
 	addi $sp, $sp, 8		# pop off the stack
 	
 	jr $ra
+
+
+
+
+
+# Normalize emissions to a height in the range 0-64
+# Preconditions:
+#   $f0 = emission value (in kg CO₂)
+# Postconditions:
+#   $v0 = normalized height (integer 0-64)
+normalize_emission:
+	addi $sp, $sp, -8		# make room on the stack for 2 words ($ra, $fp)
+	sw $fp, 4($sp)		# store frame pointer
+	addi $fp, $sp, 4	# move the $fp to the beginning of this stack frame
+	sw $ra, -4($fp)		# store return address
+
+
+
+    li $s0, 45            # Assume max emission is 45 kg CO2
+    mtc1 $s0, $f6          # Move 45 into $f6
+    cvt.d.w $f6, $f6       # Convert 45 to double
+
+    div.d $f8, $f0, $f6    # emission / 45 (normalize to 0-1)
+    li $s1, 64             # Max height (64 pixels)
+    mtc1 $s1, $f6          # Move 64 into $f6
+    cvt.d.w $f6, $f6       # Convert 64 to double
+    mul.d $f8, $f8, $f6    # emission_normalized * 64
+
+    cvt.w.d $f8, $f8       # Convert result to integer
+    mfc1 $v0, $f8          # Move result into $v0
+    
+    
+    	lw $ra, -4($fp)			# restore return address
+	lw $fp, 0($fp)			# restore frame pointer
+	addi $sp, $sp, 8		# pop off the stack
+    
+    jr $ra
