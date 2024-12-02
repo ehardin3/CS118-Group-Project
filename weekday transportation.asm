@@ -2,19 +2,30 @@
 # This module calculates the weekday transportation emissions 
 
 .data
-# Prompts
+# Prompts for weekday transportation
 main_question: .asciiz "\nDo you go to (1-School, 2-Work, 3-Both)? "
 transport_question: .asciiz "\nWhat do you take (1-Walk, 2-Bike, 3-Bus/Public Transit, 4-Personal Car, 5-Carpool)? "
 miles_question: .asciiz "\nHow many miles do you travel daily? "
 carpool_question: .asciiz "\nIf carpool, how many people (including yourself)? "
 weekday_emission_result: .asciiz "\nYour weekday transportation emissions (kg CO2): "
 
-# Emission factors (double-precision)
-ef_bus: .double 0.1
-ef_car: .double 0.3
-ef_carpool: .double 0.3
-zero_value: .double 0.0  # Default value for non-motorized modes
+# Prompts for weekday energy
+solar_question: .asciiz "\nDo you have solar panels installed? (1-Yes, 2-No): "
+bulb_question: .asciiz "\nDo you use LED bulbs or Incandescent bulbs? (1-LED, 2-Incandescent): "
+light_hours_question: .asciiz "\nHow many hours do you leave your lights on daily? (0-24): "
+heater_or_blanket_question: .asciiz "\nDo you use a heater or just a blanket? (1-Heater, 2-Blanket): "
+heater_hours_question: .asciiz "\nHow many hours do you use the heater daily? (0-24): "
+weekday_energy_result: .asciiz "\nYour weekday energy emissions (kg CO2): "
 
+# Emission factors (double-precision)
+ef_bus: .double 0.1            # Public transit (kg CO2 per mile)
+ef_car: .double 0.3            # Personal car (kg CO2 per mile)
+ef_carpool: .double 0.3        # Carpool (kg CO2 per mile, adjusted by passengers)
+zero_value: .double 0.0        # Non-motorized transport
+ef_led: .double 0.01           # LED light bulb (kg CO2 per hour)
+ef_incandescent: .double 0.05  # Incandescent bulb (kg CO2 per hour)
+ef_heater: .double 1.5         # Heater (kg CO2 per hour)
+ef_blanket: .double 0.0        # Blanket (no emissions)
 
 # set display to:
 #	Pixels width and height to 4x4
