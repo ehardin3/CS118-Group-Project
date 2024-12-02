@@ -1,0 +1,152 @@
+.data
+# Prompts for weekday energy
+solar_question: .asciiz "\nDo you have solar panels installed? (1-Yes, 2-No): "
+bulb_question: .asciiz "\nDo you use LED bulbs or Incandescent bulbs? (1-LED, 2-Incandescent): "
+light_hours_question: .asciiz "\nHow many hours do you leave your lights on daily? (0-24): "
+invalid_input_msg: .asciiz "\nInvalid input. Please try again."
+heater_question: .asciiz "\nDo you use a heater or just a blanket? (1-Heater, 2-Blanket): "
+weekday_energy_result: .asciiz "\nYour weekday energy emissions (kg CO2): "
+
+# Emission factors for energy use
+ef_led: .double 0.01      # kg CO2 per hour per LED bulb
+ef_incandescent: .double 0.05  # kg CO2 per hour per incandescent bulb
+ef_heater: .double 1.5    # kg CO2 per hour for heating
+ef_blanket: .double 0.0   # No emissions for using a blanket
+
+.text
+.globl main
+
+main:
+    # Main function
+    # Calls handle_weekday_energy to calculate energy emissions
+    # Precondition:
+    # - User provides valid inputs for all energy-related questions.
+    # Postcondition:
+    # - Displays total weekday energy emissions (kg CO2).
+    jal handle_weekday_energy
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+# handle_weekday_energy
+# Calculates weekday energy emissions based on user inputs.
+# Precondition:
+# - $a0 is used to display prompts for each question.
+# - The user must provide valid inputs for:
+#   1) Solar panel installation status (1-Yes, 2-No).
+#   2) Light bulb type (1-LED, 2-Incandescent).
+#   3) Daily light usage hours (0-24).
+#   4) Heating method (1-Heater, 2-Blanket).
+# Postcondition:
+# - $f12 will contain the total weekday energy emissions in kg CO2.
+# - All user inputs are saved on the stack for later use.
+
+handle_weekday_energy:
+    addiu $sp, $sp, -20       # Allocate space for 4 inputs and return address
+    sw $ra, 16($sp)           # Save return address
+
+    # Question 1: Solar Panels
+    li $v0, 4
+    la $a0, solar_question
+    syscall
+
+    li $v0, 5
+    syscall
+    sw $v0, 0($sp)            # Save solar panel choice on the stack
+
+    # Question 2: Light Bulb Type
+    li $v0, 4
+    la $a0, bulb_question
+    syscall
+
+    li $v0, 5
+    syscall
+    sw $v0, 4($sp)            # Save light bulb type on the stack
+
+    # Question 3: Light Usage Hours (Allow 0-24)
+light_hours_prompt:
+    li $v0, 4
+    la $a0, light_hours_question
+    syscall
+
+    li $v0, 5
+    syscall
+    blt $v0, 0, invalid_hours   # Check if input is below 0
+    bgt $v0, 24, invalid_hours  # Check if input is above 24
+    sw $v0, 8($sp)              # Save valid light usage hours on the stack
+    j valid_hours
+
+invalid_hours:
+    li $v0, 4
+    la $a0, invalid_input_msg   # Display invalid input message
+    syscall
+    j light_hours_prompt        # Retry the question
+
+valid_hours:
+    # Question 4: Heater or Blanket
+    li $v0, 4
+    la $a0, heater_question
+    syscall
+
+    li $v0, 5
+    syscall
+    sw $v0, 12($sp)             # Save heating choice on the stack
+
+    # Load values from stack for calculations
+    lw $t0, 0($sp)              # Load solar panel choice
+    lw $t1, 4($sp)              # Load light bulb type
+    lw $t2, 8($sp)              # Load light usage hours
+    lw $t3, 12($sp)             # Load heating choice
+
+    # Calculate Light Bulb Emissions
+    beq $t1, 1, use_led         # If LED
+    beq $t1, 2, use_incandescent # If Incandescent
+
+use_led:
+    l.d $f0, ef_led             # Load LED emission factor
+    j calculate_light_emissions
+
+use_incandescent:
+    l.d $f0, ef_incandescent    # Load incandescent emission factor
+
+calculate_light_emissions:
+    mtc1 $t2, $f4               # Move hours to floating-point register
+    cvt.d.w $f4, $f4            # Convert hours to double
+    mul.d $f6, $f0, $f4         # Total light bulb emissions = EF * hours
+
+    # Calculate Heater or Blanket Emissions
+    beq $t3, 1, use_heater      # If Heater
+    beq $t3, 2, use_blanket     # If Blanket
+
+use_heater:
+    l.d $f0, ef_heater          # Load heater emission factor
+    mul.d $f8, $f0, $f4         # Total heater emissions = EF * hours
+    j sum_energy_emissions
+
+use_blanket:
+    l.d $f8, ef_blanket         # Load blanket emission factor (0 emissions)
+    j sum_energy_emissions
+
+sum_energy_emissions:
+    add.d $f10, $f6, $f8        # Total energy emissions = light + heater/blanket
+
+    # Multiply by 5 for weekday total
+    li $t4, 5
+    mtc1 $t4, $f4
+    cvt.d.w $f4, $f4
+    mul.d $f12, $f10, $f4       # Weekly energy emissions
+
+    # Display result
+    li $v0, 4
+    la $a0, weekday_energy_result
+    syscall
+
+    li $v0, 3
+    mov.d $f12, $f12            # Load result for printing
+    syscall
+
+    # Cleanup
+    lw $ra, 12($sp)             # Restore return address
+    addiu $sp, $sp, 16          # Deallocate stack space
+    jr $ra                      # Return to main
